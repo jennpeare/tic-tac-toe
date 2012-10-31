@@ -24,9 +24,35 @@ class TicTacToe
 
 		@drawBoard()
 
+	announce: (text)->
+		centerX = @width/2
+		centerY = @height/2
+
+		# Background
+		@context.beginPath()
+		@context.rect(0, centerY/2, @width, centerY)
+		@context.fillStyle = '#000000'
+		@context.fill()
+
+		# Announcement
+		@context.font = "#{centerY/3}px sans-serif"
+		@context.textAlign = 'center'
+		@context.textBaseline = 'middle'
+		@context.fillStyle = '#FFFFFF'
+		@context.fillText(text, centerX, centerY)
+
+		this
+
 	endGame: (winner)->
 		@$canvas.off('click').css('cursor', 'default')
-		console.log winner
+		if winner is O_PLAYER
+			announcement = 'O WINS!'
+		else if winner is X_PLAYER
+			announcement = 'X WINS!'
+		else
+			announcement = 'TIE!'
+
+		@announce(announcement)
 
 	captureClick: (e)=>
 		squareIndex = @findSquareIndex(e)
@@ -37,6 +63,8 @@ class TicTacToe
 			winner = @checkForWin()
 			if winner isnt undefined
 				@endGame(winner)
+
+		this
 
 	findSquareIndex: (e)=>
 		[x, y] = [e.offsetX, e.offsetY]
@@ -67,6 +95,8 @@ class TicTacToe
 			@drawX(x, y, thirdHeight, thirdWidth)
 		else
 			@drawO(x, y, Math.min(thirdHeight, thirdWidth) )
+
+		this
 	
 	drawO: (x, y, squareSize)->
 		radius = squareSize*0.75
@@ -74,6 +104,8 @@ class TicTacToe
 		@context.arc(x, y, radius, 0, 2*Math.PI, false)
 		@context.lineWidth = 3
 		@context.stroke()
+
+		this
 
 	drawX: (x, y, height, width)->
 		halfHeight = height/2
@@ -92,9 +124,13 @@ class TicTacToe
 		@context.lineWidth = 3
 		@context.stroke()
 
+		this
+
 	populateSquare: (index)->
 		@symbols[index] = @currentPlayer
 		@currentPlayer = if @currentPlayer is X_PLAYER then O_PLAYER else X_PLAYER
+
+		this
 
 	checkForWin: ()->
 		winner = undefined
@@ -119,6 +155,7 @@ class TicTacToe
 					tie = false
 			if tie is true
 				winner = TIE
+
 		winner
 
 
@@ -163,5 +200,7 @@ class TicTacToe
 		@context.lineTo(2*thirdWidth, @height)
 
 		@context.stroke()
+
+		this
 
 game = new TicTacToe('tic_tac_toe')

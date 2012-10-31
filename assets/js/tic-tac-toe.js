@@ -42,9 +42,33 @@
       this.drawBoard();
     }
 
+    TicTacToe.prototype.announce = function(text) {
+      var centerX, centerY;
+      centerX = this.width / 2;
+      centerY = this.height / 2;
+      this.context.beginPath();
+      this.context.rect(0, centerY / 2, this.width, centerY);
+      this.context.fillStyle = '#000000';
+      this.context.fill();
+      this.context.font = "" + (centerY / 3) + "px sans-serif";
+      this.context.textAlign = 'center';
+      this.context.textBaseline = 'middle';
+      this.context.fillStyle = '#FFFFFF';
+      this.context.fillText(text, centerX, centerY);
+      return this;
+    };
+
     TicTacToe.prototype.endGame = function(winner) {
+      var announcement;
       this.$canvas.off('click').css('cursor', 'default');
-      return console.log(winner);
+      if (winner === O_PLAYER) {
+        announcement = 'O WINS!';
+      } else if (winner === X_PLAYER) {
+        announcement = 'X WINS!';
+      } else {
+        announcement = 'TIE!';
+      }
+      return this.announce(announcement);
     };
 
     TicTacToe.prototype.captureClick = function(e) {
@@ -55,9 +79,10 @@
         this.populateSquare(squareIndex);
         winner = this.checkForWin();
         if (winner !== void 0) {
-          return this.endGame(winner);
+          this.endGame(winner);
         }
       }
+      return this;
     };
 
     TicTacToe.prototype.findSquareIndex = function(e) {
@@ -86,10 +111,11 @@
       thirdHeight = this.height / 6;
       thirdWidth = this.width / 6;
       if (this.currentPlayer === X_PLAYER) {
-        return this.drawX(x, y, thirdHeight, thirdWidth);
+        this.drawX(x, y, thirdHeight, thirdWidth);
       } else {
-        return this.drawO(x, y, Math.min(thirdHeight, thirdWidth));
+        this.drawO(x, y, Math.min(thirdHeight, thirdWidth));
       }
+      return this;
     };
 
     TicTacToe.prototype.drawO = function(x, y, squareSize) {
@@ -98,7 +124,8 @@
       this.context.beginPath();
       this.context.arc(x, y, radius, 0, 2 * Math.PI, false);
       this.context.lineWidth = 3;
-      return this.context.stroke();
+      this.context.stroke();
+      return this;
     };
 
     TicTacToe.prototype.drawX = function(x, y, height, width) {
@@ -111,12 +138,14 @@
       this.context.moveTo(x - halfWidth, y + halfHeight);
       this.context.lineTo(x + halfWidth, y - halfHeight);
       this.context.lineWidth = 3;
-      return this.context.stroke();
+      this.context.stroke();
+      return this;
     };
 
     TicTacToe.prototype.populateSquare = function(index) {
       this.symbols[index] = this.currentPlayer;
-      return this.currentPlayer = this.currentPlayer === X_PLAYER ? O_PLAYER : X_PLAYER;
+      this.currentPlayer = this.currentPlayer === X_PLAYER ? O_PLAYER : X_PLAYER;
+      return this;
     };
 
     TicTacToe.prototype.checkForWin = function() {
@@ -179,7 +208,8 @@
       this.context.lineTo(thirdWidth, this.height);
       this.context.moveTo(2 * thirdWidth, 0);
       this.context.lineTo(2 * thirdWidth, this.height);
-      return this.context.stroke();
+      this.context.stroke();
+      return this;
     };
 
     return TicTacToe;

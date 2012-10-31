@@ -6,12 +6,33 @@
 
     function TicTacToe() {
       this.setUpBoard();
-      this.addEventListeners();
     }
 
     TicTacToe.prototype.setUpBoard = function() {
       this.canvas = document.getElementById('tic_tac_toe');
-      return this.context = this.canvas.getContext('2d');
+      this.context = this.canvas.getContext('2d');
+      this.$canvas = $('#tic_tac_toe');
+      this.height = this.$canvas.height();
+      this.width = this.$canvas.width();
+      this.canvas.setAttribute('height', this.height);
+      this.canvas.setAttribute('width', this.width);
+      return this.drawBoard();
+    };
+
+    TicTacToe.prototype.drawBoard = function() {
+      var thirdHeight, thirdWidth;
+      thirdHeight = this.height / 3;
+      thirdWidth = this.width / 3;
+      this.context.beginPath();
+      this.context.moveTo(0, thirdHeight);
+      this.context.lineTo(this.width, thirdHeight);
+      this.context.moveTo(0, 2 * thirdHeight);
+      this.context.lineTo(this.width, 2 * thirdHeight);
+      this.context.moveTo(thirdWidth, 0);
+      this.context.lineTo(thirdWidth, this.height);
+      this.context.moveTo(2 * thirdWidth, 0);
+      this.context.lineTo(2 * thirdWidth, this.height);
+      return this.context.stroke();
     };
 
     return TicTacToe;

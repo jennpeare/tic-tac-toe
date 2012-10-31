@@ -4,6 +4,7 @@ body {
 
 #tic_tac_toe {
 	border: 1px solid #000;
+	cursor: pointer;
 	height: 400px;
 	width: 400px;
 }

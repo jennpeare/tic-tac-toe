@@ -1,6 +1,7 @@
-EMPTY = null
+EMPTY = undefined
 O_PLAYER = 0
 X_PLAYER = 1
+TIE = 2
 
 class TicTacToe
 	constructor: (@id)->
@@ -12,7 +13,7 @@ class TicTacToe
 		@width   = @$canvas.width()
 		{@x, @y} = @$canvas.position()
 
-		@$canvas.on('click', @captureClick)
+		@$canvas.on 'click', @captureClick
 
 		@canvas.setAttribute('height', @height)
 		@canvas.setAttribute('width',  @width)
@@ -25,11 +26,12 @@ class TicTacToe
 
 	endGame: (winner)->
 		@$canvas.off('click').css('cursor', 'default')
+		console.log winner
 
 	captureClick: (e)=>
 		squareIndex = @findSquareIndex(e)
 
-		if @symbols[squareIndex] is null
+		if @symbols[squareIndex] is EMPTY
 			@drawSymbol(squareIndex)
 			@populateSquare(squareIndex)
 			winner = @checkForWin()
@@ -98,15 +100,25 @@ class TicTacToe
 		winner = undefined
 		if (@symbols[0] isnt EMPTY and @symbols[0] is @symbols[1] and @symbols[0] is @symbols[2]) or
 		   (@symbols[0] isnt EMPTY and @symbols[0] is @symbols[3] and @symbols[0] is @symbols[6]) or
-		   (@symbols[0] isnt EMPTY and @symbols[0] is @symbols[4] and @symbols[0] is @symbols[8]) or
-		   (@symbols[6] isnt EMPTY and @symbols[6] is @symbols[7] and @symbols[0] is @symbols[8])
+		   (@symbols[0] isnt EMPTY and @symbols[0] is @symbols[4] and @symbols[0] is @symbols[8])
 			winner = @symbols[0]
 		else if (@symbols[2] isnt EMPTY and @symbols[2] is @symbols[4] and @symbols[2] is @symbols[6]) or
 		        (@symbols[2] isnt EMPTY and @symbols[2] is @symbols[5] and @symbols[2] is @symbols[8])
 			winner = @symbols[2]
-		else if (@symbols[1] isnt EMPTY and @symbols[1] is @symbols[4] and @symbols[1] is @symbols[7]) or
-		        (@symbols[3] isnt EMPTY and @symbols[3] is @symbols[4] and @symbols[3] is @symbols[5])
+		else if (@symbols[1] isnt EMPTY and @symbols[1] is @symbols[4] and @symbols[1] is @symbols[7])
 			winner = @symbols[1]
+		else if (@symbols[6] isnt EMPTY and @symbols[6] is @symbols[7] and @symbols[6] is @symbols[8])
+			winner = @symbols[6]
+		else if (@symbols[3] isnt EMPTY and @symbols[3] is @symbols[4] and @symbols[3] is @symbols[5])
+			winner = @symbols[3]
+
+		if winner is undefined
+			tie = true
+			for symbol in @symbols
+				if symbol is EMPTY
+					tie = false
+			if tie is true
+				winner = TIE
 		winner
 
 

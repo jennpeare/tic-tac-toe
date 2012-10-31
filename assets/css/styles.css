@@ -1,0 +1,9 @@
+body {
+	text-align: center;
+}
+
+#tic_tac_toe {
+	border: 1px solid #000;
+	height: 400px;
+	width: 400px;
+}
